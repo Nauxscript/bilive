@@ -1,0 +1,26 @@
+{
+  "name": "bilive",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "esno src/index.ts",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cac": "^6.7.14"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.34.0",
+    "@types/node": "^18.11.18",
+    "bumpp": "^8.2.1",
+    "eslint": "^8.31.0",
+    "esno": "^0.16.3",
+    "typescript": "^4.9.4",
+    "unbuild": "^1.0.2",
+    "vitest": "^0.26.3"
+  }
+}
