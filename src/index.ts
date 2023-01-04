@@ -6,6 +6,7 @@ import { type MsgHandler, startListen } from 'blive-message-listener'
 
 // 从package.json中获取版本及名字
 import { name, version } from '../package.json'
+import { debouce } from './utils'
 
 const cli = Cac(name)
 
@@ -18,6 +19,10 @@ let currBulletContent = ''
 // Make a sound at the same time
 const speakAtSameTime = false
 
+const debouceSpeak = debouce((content: string) => {
+  say.speak(content)
+})
+
 const handler: MsgHandler = {
   onIncomeDanmu: (msg) => {
     // console.log(msg.id, msg.body)
@@ -27,7 +32,7 @@ const handler: MsgHandler = {
     if (!isCanSay)
       return
     if (!speakAtSameTime)
-      say.speak(currBulletContent)
+      debouceSpeak(currBulletContent)
     else
       say.speak(msg.body.content)
   },
@@ -39,9 +44,9 @@ const handler: MsgHandler = {
     if (!isCanSay)
       return
     if (!speakAtSameTime)
-      say.speak(currBulletContent)
+      debouceSpeak(currBulletContent)
     else
-      say.speak(msg.body.content)
+      say.speak(currBulletContent)
   },
 }
 
