@@ -7,6 +7,9 @@
     "dev": "esno src/index.ts",
     "test": "vitest"
   },
+  "bin": {
+    "bilive": "src/index.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
