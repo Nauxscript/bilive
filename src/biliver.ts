@@ -5,32 +5,6 @@ import { type MsgHandler, startListen } from 'blive-message-listener'
 import chalk from 'chalk'
 import { debouceSpeak, sligleLineConsole } from './utils'
 
-const initHandler = (biliver: Biliver): MsgHandler => {
-  return {
-    onIncomeDanmu(msg) {
-      biliver.add(msg)
-    },
-    onIncomeSuperChat(msg) {
-      biliver.add(msg)
-    },
-    onOpen() {
-      sligleLineConsole('===== open ws =====')
-    },
-    onStartListen() {
-      sligleLineConsole('\r=====  start! =====')
-    },
-    onClose() {
-      console.log('===== this up is close the live =====')
-      process.exit()
-    },
-    onError(err) {
-      console.log(err)
-      console.log('=====  connect error! =====')
-      process.exit()
-    },
-  }
-}
-
 export interface Options {
   roomId: string
   isCanSay?: boolean
@@ -50,13 +24,13 @@ export class Biliver {
 
   listener: MessageListener | undefined
 
-  handler: MsgHandler
+  handler: MsgHandler = {}
 
   constructor(options: Options) {
     this.roomId = options.roomId
     this.isCanSay = options.isCanSay || false
     this.speakAtSameTime = options.speakAtSameTime || false
-    this.handler = initHandler(this)
+    this.initHandler()
   }
 
   start() {
@@ -81,8 +55,31 @@ export class Biliver {
       say.speak(msg.body.content)
   }
 
-  public setupHandler(handler: MsgHandler) {
-    this.handler = Object.assign(this.handler, handler)
+  initHandler(handler?: MsgHandler) {
+    const defaultHandler: MsgHandler = {
+      onIncomeDanmu: (msg) => {
+        this.add(msg)
+      },
+      onIncomeSuperChat: (msg) => {
+        this.add(msg)
+      },
+      onOpen() {
+        sligleLineConsole('===== open ws =====')
+      },
+      onStartListen() {
+        sligleLineConsole('\r=====  start! =====')
+      },
+      onClose() {
+        console.log('===== this up is close the live =====')
+        process.exit()
+      },
+      onError(err) {
+        console.log(err)
+        console.log('=====  connect error! =====')
+        process.exit()
+      },
+    }
+    this.handler = Object.assign(defaultHandler, handler || {})
   }
 
   public createBulletStr(msg: Message<DanmuMsg | SuperChatMsg>) {

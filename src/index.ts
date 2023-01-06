@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+#!/usr/bin/env esno
 import Cac from 'cac'
 
 // 从package.json中获取版本及名字
