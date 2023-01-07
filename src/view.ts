@@ -1,6 +1,24 @@
 import c from 'child_process'
 import type { Widgets } from 'blessed'
 import { box, list, loading, screen, text } from 'blessed'
+
+// 直播间地址前缀
+const baseLiveUrl = 'https://live.bilibili.com/'
+
+export interface RoomInfo {
+  roomId: string
+  roomUrl: string
+  /** 直播间标题 */
+  title?: number
+  /** 一级分区id */
+  parent_area_id?: number
+  /** 一级分区名 */
+  parent_area_name?: number
+  /** 二级分区id */
+  area_id?: number
+  /** 二级分区名 */
+  area_name?: number
+}
 // for debugging
 // const testData = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 export class BiliverView {
@@ -34,6 +52,10 @@ export class BiliverView {
     },
   })
 
+  roomTitle = text({
+    content: '1234',
+  })
+
   bulletList = list({
     top: 4,
     left: 'center',
@@ -52,6 +74,7 @@ export class BiliverView {
     },
     mouse: true,
     scrollable: true,
+    interactive: false,
     // items: testData, // for testing
   })
 
@@ -65,9 +88,16 @@ export class BiliverView {
     },
   })
 
+  roomInfo: RoomInfo = {
+    roomId: '',
+    roomUrl: '',
+  }
+
   bulletListData: string[] = []
 
-  constructor() {
+  constructor(roomId: string) {
+    this.roomInfo.roomId = roomId
+    this.roomInfo.roomUrl = baseLiveUrl + roomId
     this.init()
     this.render()
   }
@@ -129,17 +159,20 @@ export class BiliverView {
     return this.bulletList.childBase + Number(this.bulletList.height)
   }
 
-  init() {
-    const title = text({
-      content: '1234',
-    })
-    title.on('click', () => {
-      c.exec('open https://live.bilibili.com/', (error) => {
+  private initHeader() {
+    this.roomTitle.content = `房间号：${this.roomInfo.roomId}`
+    this.header.append(this.roomTitle)
+    this.roomTitle.on('click', () => {
+      c.exec(`open ${this.roomInfo.roomUrl}`, (error) => {
         if (error)
-          c.exec('start http://www.baidu.comm')
+          c.exec(`open ${this.roomInfo.roomUrl}`)
       })
     })
-    this.header.append(title)
+  }
+
+  init() {
+    this.initHeader()
+
     this.appendView(this.header)
     this.appendView(this.bulletList)
     this.appendView(this.loadingDialog, true)
@@ -170,5 +203,10 @@ export class BiliverView {
     this.bulletList.add(item)
     this.bulletList.scroll(1)
     this.screen.render()
+  }
+
+  updateRoomInfo(info: RoomInfo) {
+    // eslint-disable-next-line no-console
+    console.log(info)
   }
 }

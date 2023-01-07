@@ -33,7 +33,7 @@ export class Biliver {
     this.roomId = options.roomId
     this.isCanSay = options.isCanSay || false
     this.speakAtSameTime = options.speakAtSameTime || false
-    this.view = new BiliverView()
+    this.view = new BiliverView(this.roomId)
     this.initHandler()
   }
 
@@ -66,6 +66,9 @@ export class Biliver {
       },
       onIncomeSuperChat: (msg) => {
         this.add(msg)
+      },
+      onRoomInfoChange: (msg) => {
+        this.view.updateRoomInfo(msg.body)
       },
       onOpen: () => {
         this.view.loading(true)
