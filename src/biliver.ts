@@ -4,7 +4,7 @@ import say from 'say'
 import type { DanmuMsg, Message, MessageListener, SuperChatMsg } from 'blive-message-listener'
 import { type MsgHandler, startListen } from 'blive-message-listener'
 import { BiliverView } from './view'
-import { debouceSpeak } from './utils'
+import { debouceSpeak, setBadgeStyle } from './utils'
 
 export interface Options {
   roomId: string
@@ -94,17 +94,11 @@ export class Biliver {
   }
 
   public createBulletStr(msg: Message<DanmuMsg | SuperChatMsg>) {
-    let badgeText = ''
-    // default text color
+    msg = setBadgeStyle(msg)
 
-    const { badge } = msg.body.user
-    let { uname } = msg.body.user
-    if (badge) {
-      badgeText = `[${chalk.hex(badge.color)(badge.name)}]`
-      // 点亮
-      badge.active && (uname = `● ${uname}`)
-    }
-    const outputStr = `${uname}${badgeText}：${msg.body.content}`
+    const { uname, badge } = msg.body.user
+
+    const outputStr = `${uname}${badge?.name || ''}：${msg.body.content}`
 
     return outputStr
   }
