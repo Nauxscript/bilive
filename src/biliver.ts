@@ -3,7 +3,8 @@ import say from 'say'
 import type { DanmuMsg, Message, MessageListener, SuperChatMsg } from 'blive-message-listener'
 import { type MsgHandler, startListen } from 'blive-message-listener'
 import chalk from 'chalk'
-import { debouceSpeak, sligleLineConsole } from './utils'
+import { BiliverView } from './view'
+import { debouceSpeak } from './utils'
 
 export interface Options {
   roomId: string
@@ -26,10 +27,14 @@ export class Biliver {
 
   handler: MsgHandler = {}
 
+  view: BiliverView
+
   constructor(options: Options) {
     this.roomId = options.roomId
     this.isCanSay = options.isCanSay || false
     this.speakAtSameTime = options.speakAtSameTime || false
+    this.view = new BiliverView()
+    this.view.render()
     this.initHandler()
   }
 
@@ -42,8 +47,9 @@ export class Biliver {
     this.fire(msg)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fire(msg: Message<DanmuMsg | SuperChatMsg>) {
-    console.log(this.createBulletStr(msg))
+    // this.view.addListItem(this.createBulletStr(msg))
   }
 
   say(msg: Message<DanmuMsg | SuperChatMsg>) {
@@ -63,20 +69,24 @@ export class Biliver {
       onIncomeSuperChat: (msg) => {
         this.add(msg)
       },
-      onOpen() {
-        sligleLineConsole('===== open ws =====')
+      onOpen: () => {
+        this.view.loading(true)
       },
-      onStartListen() {
-        sligleLineConsole('\r=====  start! =====')
+      onStartListen: () => {
+        this.view.loading(false)
       },
-      onClose() {
-        console.log('===== this up is close the live =====')
-        process.exit()
+      onClose: () => {
+        this.view.loading(true, 'up 下播了')
+        setTimeout(() => {
+          process.exit()
+        }, 6000)
       },
-      onError(err) {
+      onError: (err) => {
         console.log(err)
-        console.log('=====  connect error! =====')
-        process.exit()
+        this.view.loading(false, 'connect error')
+        setTimeout(() => {
+          process.exit()
+        }, 6000)
       },
     }
     this.handler = Object.assign(defaultHandler, handler || {})
