@@ -2,7 +2,9 @@ lockfileVersion: 5.4
 
 specifiers:
   '@antfu/eslint-config': ^0.34.0
+  '@types/blessed': ^0.1.19
   '@types/node': ^18.11.18
+  blessed: ^0.1.81
   blive-message-listener: ^0.4.1
   bumpp: ^8.2.1
   cac: ^6.7.14
@@ -15,6 +17,8 @@ specifiers:
   vitest: ^0.26.3
 
 dependencies:
+  '@types/blessed': 0.1.19
+  blessed: 0.1.81
   blive-message-listener: 0.4.1
   cac: 6.7.14
   say: 0.16.0
@@ -772,6 +776,12 @@ packages:
       rollup: 3.9.1
     dev: true
 
+  /@types/blessed/0.1.19:
+    resolution: {integrity: sha512-r4qnseYWBsi/kxo5AAlCS22EnTXFbGpnvuXUubJikVeRnYB3e5HwV3NtcwJ0Sk5KOGaLvo9Rtwb8hzxfbqbQPg==}
+    dependencies:
+      '@types/node': 18.11.18
+    dev: false
+
   /@types/chai-subset/1.3.3:
     resolution: {integrity: sha512-frBecisrNGz+F4T6bcc+NLeolfiojh5FxW2klu669+8BARtyQv2C/GkNW6FUodVe4BroGMP/wER/YDGc7rEllw==}
     dependencies:
@@ -802,7 +812,6 @@ packages:
 
   /@types/node/18.11.18:
     resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==}
-    dev: true
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
@@ -1033,6 +1042,12 @@ packages:
   /balanced-match/1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
+
+  /blessed/0.1.81:
+    resolution: {integrity: sha512-LoF5gae+hlmfORcG1M5+5XZi4LBmvlXTzwJWzUlPryN/SJdSflZvROM2TwkT0GMpq7oqT48NRd4GS7BiVBc5OQ==}
+    engines: {node: '>= 0.8.0'}
+    hasBin: true
+    dev: false
 
   /blive-message-listener/0.4.1:
     resolution: {integrity: sha512-6qFHXE4OHQhFq0P1YDI3vdfgGhdG5n2eQFo5ApMDp1Bk0Wx12XD7DOjTiIjwtmGe0H292lvMPIU7vL3TccuCwg==}
