@@ -1,8 +1,8 @@
+import c from 'child_process'
 import type { Widgets } from 'blessed'
-import { box, list, loading, screen } from 'blessed'
-
-const testData = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-const aa = ['1', '2', '3']
+import { box, list, loading, screen, text } from 'blessed'
+// for debugging
+// const testData = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 export class BiliverView {
   private viewSequence: Widgets.BoxElement [] = []
   private currViewIndex = 0
@@ -17,7 +17,7 @@ export class BiliverView {
     top: '0',
     left: 'center',
     width: '100%',
-    height: '20%',
+    height: 4,
     border: {
       type: 'line',
     },
@@ -35,10 +35,10 @@ export class BiliverView {
   })
 
   bulletList = list({
-    top: '20%',
+    top: 4,
     left: 'center',
     width: '100%',
-    height: '80%',
+    height: '100%-4',
     tags: true,
     border: {
       type: 'line',
@@ -52,7 +52,7 @@ export class BiliverView {
     },
     mouse: true,
     scrollable: true,
-    items: aa, // for testing
+    // items: testData, // for testing
   })
 
   loadingDialog = loading({
@@ -69,6 +69,7 @@ export class BiliverView {
 
   constructor() {
     this.init()
+    this.render()
   }
 
   private bindEvent() {
@@ -84,7 +85,7 @@ export class BiliverView {
         this.focusElementByIndex(this.currViewIndex + step)
     })
 
-    this.screen.key(['up', 'down'], (ch, key) => {
+    this.bulletList.key(['up', 'down'], (ch, key) => {
       this.scroll(key.name === 'up' ? 0 : 1)
     })
 
@@ -108,25 +109,19 @@ export class BiliverView {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private scroll(index: 1 | 0) {
-    const tt = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-    // const length = testData.length
-    this.header.content = tt.toString()
-    // eslint-disable-next-line no-console
-    console.log(aa)
-    // this.header.content = `getScroll:${this.bulletList.getScroll()};childBase:${this.bulletList.childBase};length: ${length};`
-    // if (index) {
-    //   const index = this.getLastVisualElementIndex()
-    //   if (index === this.bulletListData.length - 1) {
-    //     return this.bulletList.scrollTo(100%)
-    //   }
-    //   return this.bulletList.scrollTo(index + 1)
-    // }
+    // for debugging
+    // this.header.content = `getScroll:${this.bulletList.getScroll()};childBase:${this.bulletList.childBase};length: ${this.bulletListData.length};height:${this.bulletList.height}`
+    let to = 0
+    if (index)
+      to = this.bulletList.childBase + Number(this.bulletList.height) - 2
+    else
+      to = this.bulletList.childBase - 1
 
-    // this.header.content = `${this.bulletList.childBase - 1}`
-    // this.bulletList.scrollTo(this.bulletList.childBase - 1)
-    this.screen.render()
+    if (index >= 0 && index <= this.bulletListData.length - 1) {
+      this.bulletList.scrollTo(to)
+      this.screen.render()
+    }
   }
 
   private getLastVisualElementIndex() {
@@ -135,6 +130,16 @@ export class BiliverView {
   }
 
   init() {
+    const title = text({
+      content: '1234',
+    })
+    title.on('click', () => {
+      c.exec('open https://live.bilibili.com/', (error) => {
+        if (error)
+          c.exec('start http://www.baidu.comm')
+      })
+    })
+    this.header.append(title)
     this.appendView(this.header)
     this.appendView(this.bulletList)
     this.appendView(this.loadingDialog, true)

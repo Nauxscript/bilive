@@ -34,7 +34,6 @@ export class Biliver {
     this.isCanSay = options.isCanSay || false
     this.speakAtSameTime = options.speakAtSameTime || false
     this.view = new BiliverView()
-    this.view.render()
     this.initHandler()
   }
 
@@ -47,9 +46,8 @@ export class Biliver {
     this.fire(msg)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   fire(msg: Message<DanmuMsg | SuperChatMsg>) {
-    // this.view.addListItem(this.createBulletStr(msg))
+    this.view.addListItem(this.createBulletStr(msg))
   }
 
   say(msg: Message<DanmuMsg | SuperChatMsg>) {
