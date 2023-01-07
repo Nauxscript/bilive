@@ -40,10 +40,12 @@ export class BiliverView {
       type: 'line',
     },
     style: {
-      fg: 'white',
+      border: {
+        fg: '#000000',
+      },
       focus: {
         border: {
-          fg: 'blue',
+          fg: 'white',
         },
       },
       hover: {
@@ -54,6 +56,8 @@ export class BiliverView {
 
   roomTitle = text({
     content: '1234',
+    top: -1,
+    left: 2,
   })
 
   bulletList = list({
@@ -66,15 +70,25 @@ export class BiliverView {
       type: 'line',
     },
     style: {
+      border: {
+        fg: '#000000',
+      },
       focus: {
         border: {
-          fg: 'blue',
+          fg: 'white',
+        },
+        scrollbar: {
+          bg: 'white',
         },
       },
     },
     mouse: true,
     scrollable: true,
-    interactive: false,
+    scrollbar: {
+      ch: ' ',
+    },
+    invertSelected: false,
+    // interactive: false, // set it to false will diasable the mouse event
     // items: testData, // for testing
   })
 
@@ -117,6 +131,13 @@ export class BiliverView {
 
     this.bulletList.key(['up', 'down'], (ch, key) => {
       this.scroll(key.name === 'up' ? 0 : 1)
+    })
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    this.bulletList.on('focus', (tt) => {
+      // console.log(tt)
+      this.bulletList.height = '100%-4'
+      this.screen.render()
     })
 
     // Quit on Escape, q, or Control-C. Must be set!
@@ -170,8 +191,17 @@ export class BiliverView {
     })
   }
 
+  public initBulletList() {
+    this.bulletList.append(text({
+      content: '弹幕栏',
+      top: -1,
+      left: 2,
+    }))
+  }
+
   init() {
     this.initHeader()
+    this.initBulletList()
 
     this.appendView(this.header)
     this.appendView(this.bulletList)
@@ -205,7 +235,7 @@ export class BiliverView {
     this.screen.render()
   }
 
-  updateRoomInfo(info: RoomInfo) {
+  updateRoomInfo(info: Partial<RoomInfo>) {
     // eslint-disable-next-line no-console
     console.log(info)
   }
