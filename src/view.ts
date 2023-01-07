@@ -40,6 +40,7 @@ export class BiliverView {
       type: 'line',
     },
     style: {
+      fg: 'white',
       border: {
         fg: '#000000',
       },
@@ -69,6 +70,7 @@ export class BiliverView {
     border: {
       type: 'line',
     },
+    fg: 'red',
     style: {
       border: {
         fg: '#000000',

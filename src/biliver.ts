@@ -1,8 +1,8 @@
+import chalk from 'chalk'
 /* eslint-disable no-console */
 import say from 'say'
 import type { DanmuMsg, Message, MessageListener, SuperChatMsg } from 'blive-message-listener'
 import { type MsgHandler, startListen } from 'blive-message-listener'
-import chalk from 'chalk'
 import { BiliverView } from './view'
 import { debouceSpeak } from './utils'
 
@@ -94,7 +94,18 @@ export class Biliver {
   }
 
   public createBulletStr(msg: Message<DanmuMsg | SuperChatMsg>) {
-    const outputStr = `${msg.body.user.uname}：${msg.body.content}`
-    return chalk.yellowBright.bold(outputStr)
+    let badgeText = ''
+    // default text color
+
+    const { badge } = msg.body.user
+    let { uname } = msg.body.user
+    if (badge) {
+      badgeText = `[${chalk.hex(badge.color)(badge.name)}]`
+      // 点亮
+      badge.active && (uname = `● ${uname}`)
+    }
+    const outputStr = `${uname}${badgeText}：${msg.body.content}`
+
+    return outputStr
   }
 }
