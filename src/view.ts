@@ -191,7 +191,7 @@ export class BiliverView {
     })
   }
 
-  public initBulletList() {
+  private initBulletList() {
     this.bulletList.append(text({
       content: '弹幕栏',
       top: -1,
