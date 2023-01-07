@@ -140,6 +140,16 @@ export class BiliverView {
       this.screen.render()
     })
 
+    // scroll to bottom
+    this.bulletList.key(['S-g'], () => {
+      this.bulletList.setScrollPerc(100)
+    })
+
+    // helper dialog
+    this.screen.key(['?'], () => {
+      this.header.content = '?'
+    })
+
     // Quit on Escape, q, or Control-C. Must be set!
     this.screen.key(['escape', 'q', 'C-c'], () => {
       return process.exit(0)
