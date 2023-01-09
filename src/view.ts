@@ -1,24 +1,11 @@
 import c from 'child_process'
 import type { Widgets } from 'blessed'
 import { box, list, loading, screen, text } from 'blessed'
+import type { RoomInfo } from './fetchs'
 
 // 直播间地址前缀
 const baseLiveUrl = 'https://live.bilibili.com/'
 
-export interface RoomInfo {
-  roomId: string
-  roomUrl: string
-  /** 直播间标题 */
-  title?: number
-  /** 一级分区id */
-  parent_area_id?: number
-  /** 一级分区名 */
-  parent_area_name?: number
-  /** 二级分区id */
-  area_id?: number
-  /** 二级分区名 */
-  area_name?: number
-}
 // for debugging
 // const testData = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 export class BiliverView {
@@ -104,16 +91,16 @@ export class BiliverView {
     },
   })
 
-  roomInfo: RoomInfo = {
-    roomId: '',
-    roomUrl: '',
+  roomInfo: Partial<RoomInfo> & { room_url: string } = {
+    room_id: 0,
+    room_url: '',
   }
 
   bulletListData: string[] = []
 
-  constructor(roomId: string) {
-    this.roomInfo.roomId = roomId
-    this.roomInfo.roomUrl = baseLiveUrl + roomId
+  constructor(roomId: number) {
+    this.roomInfo.room_id = roomId
+    this.roomInfo.room_url = baseLiveUrl + roomId
     this.init()
     this.render()
   }
@@ -193,19 +180,28 @@ export class BiliverView {
   }
 
   private initHeader() {
-    this.roomTitle.content = `房间号：${this.roomInfo.roomId}`
+    // this.roomTitle.content = `房间号：${this.roomInfo.room_id}`
+    // this.roomTitle.content = this.roomInfo.title || ''
     this.header.append(this.roomTitle)
     this.roomTitle.on('click', () => {
-      c.exec(`open ${this.roomInfo.roomUrl}`, (error) => {
+      c.exec(`open ${this.roomInfo.room_url}`, (error) => {
         if (error)
-          c.exec(`open ${this.roomInfo.roomUrl}`)
+          c.exec(`open ${this.roomInfo.room_url}`)
       })
     })
   }
 
+  private refreshHeader() {
+    const { title, description } = this.roomInfo
+    this.roomTitle.content = ` ${title} ` || ''
+    this.header.content = description || ''
+
+    this.screen.render()
+  }
+
   private initBulletList() {
     this.bulletList.append(text({
-      content: '弹幕栏',
+      content: ' 弹幕栏 ',
       top: -1,
       left: 2,
     }))
@@ -248,7 +244,7 @@ export class BiliverView {
   }
 
   updateRoomInfo(info: Partial<RoomInfo>) {
-    // eslint-disable-next-line no-console
-    console.log(info)
+    this.roomInfo = Object.assign(this.roomInfo, info)
+    this.refreshHeader()
   }
 }

@@ -1,10 +1,13 @@
-import chalk from 'chalk'
 /* eslint-disable no-console */
+// import fs from 'fs'
 import say from 'say'
 import type { DanmuMsg, Message, MessageListener, SuperChatMsg } from 'blive-message-listener'
 import { type MsgHandler, startListen } from 'blive-message-listener'
+// import chalk from 'chalk'
 import { BiliverView } from './view'
 import { debouceSpeak, setBadgeStyle } from './utils'
+import type { RoomInfo } from './fetchs'
+import { getRoomInfo } from './fetchs'
 
 export interface Options {
   roomId: string
@@ -13,7 +16,7 @@ export interface Options {
 }
 
 export class Biliver {
-  roomId: string
+  roomId: number
   // speak the bullet
   isCanSay: boolean
 
@@ -29,12 +32,25 @@ export class Biliver {
 
   view: BiliverView
 
+  roomInfo: RoomInfo | undefined
+
   constructor(options: Options) {
-    this.roomId = options.roomId
+    this.roomId = Number(options.roomId)
     this.isCanSay = options.isCanSay || false
     this.speakAtSameTime = options.speakAtSameTime || false
     this.view = new BiliverView(this.roomId)
     this.initHandler()
+    this.getRoomInfo()
+  }
+
+  async getRoomInfo() {
+    const data = await getRoomInfo(this.roomId)
+    // for debugging
+    // fs.writeFile('test.json', JSON.stringify({ data }, null, 4), () => {
+    //   process.exit(0)
+    // })
+    if (data)
+      this.view.updateRoomInfo(data)
   }
 
   start() {
@@ -67,9 +83,9 @@ export class Biliver {
       onIncomeSuperChat: (msg) => {
         this.add(msg)
       },
-      onRoomInfoChange: (msg) => {
-        this.view.updateRoomInfo(msg.body)
-      },
+      // onRoomInfoChange: (msg) => {
+      //   this.view.updateRoomInfo(msg.body)
+      // },
       onOpen: () => {
         this.view.loading(true)
       },
