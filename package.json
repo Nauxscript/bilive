@@ -18,6 +18,7 @@
     "blessed": "^0.1.81",
     "blive-message-listener": "^0.4.1",
     "cac": "^6.7.14",
+    "ohmyfetch": "^0.4.21",
     "say": "^0.16.0"
   },
   "devDependencies": {
