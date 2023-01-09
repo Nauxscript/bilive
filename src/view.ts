@@ -72,34 +72,12 @@ export class BiliverView {
     })
   }
 
-  private bindHeaderEvent() {
-    // this.header.on('focus', () => {
-    //   this.header.height = '50%'
-    //   this.screen.render()
-    // })
-
-    // this.header.on('blur', () => {
-    //   this.header.height = '4'
-    //   this.screen.render()
-    // })
-  }
+  private bindHeaderEvent() {}
 
   private bindBulletListEvent() {
     this.bulletList.key(['up', 'down'], (ch, key) => {
       this.scroll(key.name === 'up' ? 0 : 1)
     })
-
-    // this.bulletList.on('focus', () => {
-    //   this.bulletList.height = '100%-4'
-    //   this.bulletList.top = '4'
-    //   this.screen.render()
-    // })
-
-    // this.bulletList.on('blur', () => {
-    //   this.bulletList.height = '50%'
-    //   this.bulletList.top = '50%'
-    //   this.screen.render()
-    // })
 
     // scroll to bottom
     this.bulletList.key(['S-g'], () => {
