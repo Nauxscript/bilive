@@ -64,3 +64,28 @@ export const initDataBulletList: Widgets.ListOptions = {
   // items: testData, // for testing
 }
 
+interface MapProps {
+  height: string
+  top?: string
+}
+
+export const heightMap: Record<MyElements, { focus: MapProps; blur: MapProps }> = {
+  HEADER: {
+    focus: {
+      height: '50%',
+    },
+    blur: {
+      height: '4',
+    },
+  },
+  BULLET_LIST: {
+    focus: {
+      height: '100%-4',
+      top: '4',
+    },
+    blur: {
+      height: '50%',
+      top: '50%',
+    },
+  },
+}

@@ -2,6 +2,8 @@ import c from 'child_process'
 import type { Widgets } from 'blessed'
 import { box, list, loading, screen, text } from 'blessed'
 import type { RoomInfo } from './fetchs'
+import type { MyElements } from './viewBasicData'
+import { heightMap, initDataBulletList, initDataHeader } from './viewBasicData'
 
 // 直播间地址前缀
 const baseLiveUrl = 'https://live.bilibili.com/'
@@ -18,29 +20,7 @@ export class BiliverView {
     title: 'BiLive',
   })
 
-  header = box({
-    top: '0',
-    left: 'center',
-    width: '100%',
-    height: 4,
-    border: {
-      type: 'line',
-    },
-    style: {
-      fg: 'white',
-      border: {
-        fg: '#000000',
-      },
-      focus: {
-        border: {
-          fg: 'white',
-        },
-      },
-      hover: {
-        bg: 'green',
-      },
-    },
-  })
+  header = box(initDataHeader)
 
   roomTitle = text({
     content: '1234',
@@ -48,38 +28,7 @@ export class BiliverView {
     left: 2,
   })
 
-  bulletList = list({
-    top: 4,
-    left: 'center',
-    width: '100%',
-    height: '100%-4',
-    tags: true,
-    border: {
-      type: 'line',
-    },
-    fg: 'red',
-    style: {
-      border: {
-        fg: '#000000',
-      },
-      focus: {
-        border: {
-          fg: 'white',
-        },
-        scrollbar: {
-          bg: 'white',
-        },
-      },
-    },
-    mouse: true,
-    scrollable: true,
-    scrollbar: {
-      ch: ' ',
-    },
-    invertSelected: false,
-    // interactive: false, // set it to false will diasable the mouse event
-    // items: testData, // for testing
-  })
+  bulletList = list(initDataBulletList)
 
   loadingDialog = loading({
     top: 'center',
@@ -105,16 +54,34 @@ export class BiliverView {
     this.render()
   }
 
-  private bindHeaderEvent() {
-    this.header.on('focus', () => {
-      this.header.height = '50%'
-      this.screen.render()
-    })
+  private bindFocusAndBlurEvent() {
+    this.viewSequence.forEach((ele) => {
+      ele.on('focus', () => {
+        const { height, top } = heightMap[ele.name as MyElements].focus
+        ele.height = height
+        top && (ele.top = top)
+        this.screen.render()
+      })
 
-    this.header.on('blur', () => {
-      this.header.height = '4'
-      this.screen.render()
+      ele.on('blur', () => {
+        const { height, top } = heightMap[ele.name as MyElements].blur
+        ele.height = height
+        top && (ele.top = top)
+        this.screen.render()
+      })
     })
+  }
+
+  private bindHeaderEvent() {
+    // this.header.on('focus', () => {
+    //   this.header.height = '50%'
+    //   this.screen.render()
+    // })
+
+    // this.header.on('blur', () => {
+    //   this.header.height = '4'
+    //   this.screen.render()
+    // })
   }
 
   private bindBulletListEvent() {
@@ -122,17 +89,17 @@ export class BiliverView {
       this.scroll(key.name === 'up' ? 0 : 1)
     })
 
-    this.bulletList.on('focus', () => {
-      this.bulletList.height = '100%-4'
-      this.bulletList.top = '4'
-      this.screen.render()
-    })
+    // this.bulletList.on('focus', () => {
+    //   this.bulletList.height = '100%-4'
+    //   this.bulletList.top = '4'
+    //   this.screen.render()
+    // })
 
-    this.bulletList.on('blur', () => {
-      this.bulletList.height = '50%'
-      this.bulletList.top = '50%'
-      this.screen.render()
-    })
+    // this.bulletList.on('blur', () => {
+    //   this.bulletList.height = '50%'
+    //   this.bulletList.top = '50%'
+    //   this.screen.render()
+    // })
 
     // scroll to bottom
     this.bulletList.key(['S-g'], () => {
@@ -212,8 +179,8 @@ export class BiliverView {
   }
 
   private refreshHeader() {
-    const { title, description } = this.roomInfo
-    this.roomTitle.content = ` ${title} ` || ''
+    const { title, description, room_id } = this.roomInfo
+    this.roomTitle.content = ` ${title} | ${room_id} ` || ''
     this.header.content = description || ''
 
     this.screen.render()
@@ -241,6 +208,7 @@ export class BiliverView {
     this.currViewIndex = 1
     this.bulletList.focus()
 
+    this.bindFocusAndBlurEvent()
     this.bindScreenEvent()
   }
 
