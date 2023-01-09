@@ -105,7 +105,42 @@ export class BiliverView {
     this.render()
   }
 
-  private bindEvent() {
+  private bindHeaderEvent() {
+    this.header.on('focus', () => {
+      this.header.height = '50%'
+      this.screen.render()
+    })
+
+    this.header.on('blur', () => {
+      this.header.height = '4'
+      this.screen.render()
+    })
+  }
+
+  private bindBulletListEvent() {
+    this.bulletList.key(['up', 'down'], (ch, key) => {
+      this.scroll(key.name === 'up' ? 0 : 1)
+    })
+
+    this.bulletList.on('focus', () => {
+      this.bulletList.height = '100%-4'
+      this.bulletList.top = '4'
+      this.screen.render()
+    })
+
+    this.bulletList.on('blur', () => {
+      this.bulletList.height = '50%'
+      this.bulletList.top = '50%'
+      this.screen.render()
+    })
+
+    // scroll to bottom
+    this.bulletList.key(['S-g'], () => {
+      this.bulletList.setScrollPerc(100)
+    })
+  }
+
+  private bindScreenEvent() {
     this.screen.key(['left', 'right'], (ch, key) => {
       let step = 1
       key.name === 'left' && (step = -1)
@@ -116,22 +151,6 @@ export class BiliverView {
         this.focusElementByIndex(0)
       else
         this.focusElementByIndex(this.currViewIndex + step)
-    })
-
-    this.bulletList.key(['up', 'down'], (ch, key) => {
-      this.scroll(key.name === 'up' ? 0 : 1)
-    })
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    this.bulletList.on('focus', (tt) => {
-      // console.log(tt)
-      this.bulletList.height = '100%-4'
-      this.screen.render()
-    })
-
-    // scroll to bottom
-    this.bulletList.key(['S-g'], () => {
-      this.bulletList.setScrollPerc(100)
     })
 
     // helper dialog
@@ -189,6 +208,7 @@ export class BiliverView {
           c.exec(`open ${this.roomInfo.room_url}`)
       })
     })
+    this.bindHeaderEvent()
   }
 
   private refreshHeader() {
@@ -205,6 +225,8 @@ export class BiliverView {
       top: -1,
       left: 2,
     }))
+
+    this.bindBulletListEvent()
   }
 
   init() {
@@ -219,7 +241,7 @@ export class BiliverView {
     this.currViewIndex = 1
     this.bulletList.focus()
 
-    this.bindEvent()
+    this.bindScreenEvent()
   }
 
   render() {
