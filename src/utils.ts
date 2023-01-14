@@ -1,8 +1,8 @@
 import readline from 'readline'
-import type { DanmuMsg, Message, SuperChatMsg } from 'blive-message-listener'
 import say from 'say'
 import chalk from 'chalk'
-import { circleNumbe, circleNumber } from './dictMap'
+import { circleNumber, guardLevelMap } from './dictMap'
+import type { BasicMessage } from './types'
 
 export const debouce = <T = unknown>(cb: (args: T) => void, time?: number) => {
   let timer: NodeJS.Timeout
@@ -28,15 +28,40 @@ export const sligleLineConsole = (message: any) => {
   process.stdout.write(message, 'utf-8')
 }
 
-export const setBadgeStyle = (msg: Message<DanmuMsg | SuperChatMsg>) => {
+export const generateIdentity = (msg: BasicMessage) => {
+  if (!msg.body.user.identity)
+    return ''
+  let idStr = ''
+  const { rank, guard_level, room_admin } = msg.body.user.identity
+  rank && (idStr += `${circleNumber[rank - 1]} `)
+  guard_level && (idStr += guardLevelMap[guard_level])
+  room_admin && (idStr += (idStr && '|' + '房管'))
+  return idStr ? `(${idStr})` : ''
+}
+
+export const generateBadge = (msg: BasicMessage) => {
   if (!msg.body.user.badge)
-    return msg
+    return ''
+  let badgeStr = ''
   const { badge } = msg.body.user
-  const lv = circleNumber[badge.level] || badge.level
+  const lv = `lv.${badge.level} · `
   // 名字颜色
-  badge.name = `[${lv}${badge.name}]`
+  badgeStr = `[${lv}${badge.name}]`
 
   // 点亮
-  badge.active && (badge.name = chalk.bgHex(badge.color).inverse(badge.name))
-  return msg
+  badge.active && (badgeStr = chalk.bgHex(badge.color).inverse(badgeStr))
+  return badgeStr
+}
+
+export const generateBulletName = (msg: BasicMessage) => {
+  const nameStr = msg.body.user.uname
+  const idStr = generateIdentity(msg)
+  const badgeStr = generateBadge(msg)
+  return idStr + badgeStr + nameStr
+}
+
+export const generateBullet = (msg: BasicMessage) => {
+  const headStr = generateBulletName(msg)
+  const tailStr = `：${msg.body.content}`
+  return `${headStr}${tailStr}`
 }

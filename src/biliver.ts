@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 // import fs from 'fs'
 import say from 'say'
-import type { DanmuMsg, Message, MessageListener, SuperChatMsg } from 'blive-message-listener'
+import type { MessageListener } from 'blive-message-listener'
 import { type MsgHandler, startListen } from 'blive-message-listener'
+import type { BasicMessage } from './types'
 // import chalk from 'chalk'
 import { BiliverView } from './view'
-import { debouceSpeak, setBadgeStyle } from './utils'
+import { debouceSpeak, generateBullet } from './utils'
 import type { RoomInfo } from './fetchs'
 import { getRoomInfo } from './fetchs'
 
@@ -24,7 +25,7 @@ export class Biliver {
   // Make a sound at the same time
   speakAtSameTime = false
 
-  bullets: Map<string, Message<DanmuMsg | SuperChatMsg>> = new Map()
+  bullets: Map<string, BasicMessage> = new Map()
 
   listener: MessageListener | undefined
 
@@ -57,16 +58,16 @@ export class Biliver {
     this.listener = startListen(+this.roomId, this.handler)
   }
 
-  add(msg: Message<DanmuMsg | SuperChatMsg>) {
+  add(msg: BasicMessage) {
     this.bullets.set(msg.id, msg)
     this.fire(msg)
   }
 
-  fire(msg: Message<DanmuMsg | SuperChatMsg>) {
+  fire(msg: BasicMessage) {
     this.view.addListItem(this.createBulletStr(msg))
   }
 
-  say(msg: Message<DanmuMsg | SuperChatMsg>) {
+  say(msg: BasicMessage) {
     if (!this.isCanSay)
       return
     if (!this.speakAtSameTime)
@@ -109,13 +110,7 @@ export class Biliver {
     this.handler = Object.assign(defaultHandler, handler || {})
   }
 
-  public createBulletStr(msg: Message<DanmuMsg | SuperChatMsg>) {
-    msg = setBadgeStyle(msg)
-
-    const { uname, badge } = msg.body.user
-
-    const outputStr = `${badge?.name || ''}${uname}：${msg.body.content}`
-
-    return outputStr
+  public createBulletStr(msg: BasicMessage): string {
+    return generateBullet(msg)
   }
 }
