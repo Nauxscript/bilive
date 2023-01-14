@@ -1,8 +1,11 @@
 import readline from 'readline'
 import say from 'say'
 import chalk from 'chalk'
+import type { Widgets } from 'blessed'
 import { circleNumber, guardLevelMap } from './dictMap'
-import type { BasicMessage } from './types'
+import type { BasicMessage, MapProps } from './types'
+import type { MyElements } from './viewBasicData'
+import { heightMap, initHeightMap } from './viewBasicData'
 
 export const debouce = <T = unknown>(cb: (args: T) => void, time?: number) => {
   let timer: NodeJS.Timeout
@@ -64,4 +67,25 @@ export const generateBullet = (msg: BasicMessage) => {
   const headStr = generateBulletName(msg)
   const tailStr = `：${msg.body.content}`
   return `${headStr}${tailStr}`
+}
+
+export const refreshViewElementsSize = (currName: MyElements, currIndex: number, viewSequence: Widgets.BoxElement[]) => {
+  let top = 0
+  const res: Record<MyElements, MapProps> = initHeightMap
+  viewSequence.forEach((ele, index) => {
+    const _eleH = heightMap[ele.name as MyElements]
+    ele.height = index === currIndex ? _eleH.focus : _eleH.blur
+  })
+
+  viewSequence.forEach((ele, index) => {
+    const _eleH = heightMap[ele.name as MyElements]
+    res[ele.name as MyElements] = {
+      top,
+      height: index === currIndex ? _eleH.focus : _eleH.blur,
+    }
+    ele.top = top
+    top += Number(ele.height)
+  })
+
+  return res
 }

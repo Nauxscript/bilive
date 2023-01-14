@@ -3,8 +3,10 @@ import { box, loading, screen } from 'blessed'
 import { LinkText } from './components/linkText'
 import type { RoomInfo } from './fetchs'
 import type { MyElements } from './viewBasicData'
-import { heightMap, initDataBulletList, initDataHeader } from './viewBasicData'
+import { initDataBulletList, initDataHeader, initHeightMap, initRoomMsgList } from './viewBasicData'
 import { InteractiveList } from './components/interactiveList'
+import { refreshViewElementsSize } from './utils'
+import type { MapProps } from './types'
 
 // 直播间地址前缀
 const baseLiveUrl = 'https://live.bilibili.com/'
@@ -14,6 +16,8 @@ const baseLiveUrl = 'https://live.bilibili.com/'
 export class BiliverView {
   private viewSequence: Widgets.BoxElement [] = []
   private currViewIndex = 0
+
+  calculateHeightMap: Record<MyElements, MapProps> = initHeightMap
 
   screen = screen({
     smartCSR: true,
@@ -27,12 +31,19 @@ export class BiliverView {
     content: ' - ',
     top: -1,
     left: 2,
+    bold: 'bolder',
   })
 
   // bulletList = list(initDataBulletList)
   bulletList = new InteractiveList(this, Object.assign(initDataBulletList, {
     customOptions: {
       listTitle: ' 弹幕栏 ',
+    },
+  }))
+
+  roomMsgList = new InteractiveList(this, Object.assign(initRoomMsgList, {
+    customOptions: {
+      listTitle: ' 直播间消息 ',
     },
   }))
 
@@ -61,21 +72,19 @@ export class BiliverView {
   }
 
   private bindFocusAndBlurEvent() {
-    this.viewSequence.forEach((ele) => {
-      ele.on('focus', () => {
-        const { height, top } = heightMap[ele.name as MyElements].focus
-        ele.height = height
-        top && (ele.top = top)
-        this.screen.render()
-      })
+    // this.viewSequence.forEach((ele) => {
+    //   ele.on('focus', () => {
+    //     const { top } = this.calculateHeightMap[ele.name as MyElements]
+    //     top && (ele.top = top)
+    //     this.screen.render()
+    //   })
 
-      ele.on('blur', () => {
-        const { height, top } = heightMap[ele.name as MyElements].blur
-        ele.height = height
-        top && (ele.top = top)
-        this.screen.render()
-      })
-    })
+    //   ele.on('blur', () => {
+    //     const { top } = this.calculateHeightMap[ele.name as MyElements]
+    //     ele.top = top
+    //     this.screen.render()
+    //   })
+    // })
   }
 
   private bindHeaderEvent() {}
@@ -85,9 +94,9 @@ export class BiliverView {
       let step = 1
       key.name === 'left' && (step = -1)
 
-      if (this.currViewIndex === 0)
+      if (this.currViewIndex === 0 && step === -1)
         this.focusElementByIndex(this.viewSequence.length - 1)
-      else if (this.currViewIndex === this.viewSequence.length - 1)
+      else if (this.currViewIndex === this.viewSequence.length - 1 && step === 1)
         this.focusElementByIndex(0)
       else
         this.focusElementByIndex(this.currViewIndex + step)
@@ -110,18 +119,15 @@ export class BiliverView {
   }
 
   private focusElementByIndex(index: number) {
+    // console.log(index)
     const ele = this.viewSequence[index]
+    this.calculateHeightMap = refreshViewElementsSize(ele.name as MyElements, index, this.viewSequence)
     if (ele) {
       ele.focus()
       this.currViewIndex = index
-      this.screen.render()
+      this.render()
     }
   }
-
-  // private getLastVisualElementIndex() {
-  //   this.header.content = `${this.bulletList.childBase + Number(this.bulletList.height) + 1}`
-  //   return this.bulletList.childBase + Number(this.bulletList.height)
-  // }
 
   private initHeader() {
     // this.roomTitle.content = `房间号：${this.roomInfo.room_id}`
@@ -143,12 +149,13 @@ export class BiliverView {
     this.initHeader()
 
     this.appendView(this.header)
+    this.appendView(this.roomMsgList.ele)
     this.appendView(this.bulletList.ele)
     this.appendView(this.loadingDialog, true)
 
     // focus bulletList first
-    this.currViewIndex = 1
-    this.viewSequence[this.currViewIndex].focus()
+    this.currViewIndex = 2
+    this.focusElementByIndex(this.currViewIndex)
 
     this.bindFocusAndBlurEvent()
     this.bindScreenEvent()
