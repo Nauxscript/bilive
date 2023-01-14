@@ -6,3 +6,7 @@ export interface MapProps {
   height: string
   top: string | number
 }
+
+export type msgType = 'INTERACT_WORD' | 'ENTRY_EFFECT'
+
+export type UserAction = 'enter' | 'follow' | 'share' | 'unknown'

@@ -9,6 +9,7 @@ import { BiliverView } from './view'
 import { debouceSpeak, generateBullet } from './utils'
 import type { RoomInfo } from './fetchs'
 import { getRoomInfo } from './fetchs'
+import { actionMap } from './dictMap'
 
 export interface Options {
   roomId: string
@@ -63,6 +64,10 @@ export class Biliver {
     this.fire(msg)
   }
 
+  notice(msg: string) {
+    this.view.roomMsgList.addListItem(msg)
+  }
+
   fire(msg: BasicMessage) {
     this.view.bulletList.addListItem(this.createBulletStr(msg))
   }
@@ -83,6 +88,11 @@ export class Biliver {
       },
       onIncomeSuperChat: (msg) => {
         this.add(msg)
+      },
+      onUserAction: (msg) => {
+        const { action, user } = msg.body
+        if (action !== 'unknown')
+          this.notice(user.uname + actionMap[action])
       },
       // onRoomInfoChange: (msg) => {
       //   this.view.updateRoomInfo(msg.body)
