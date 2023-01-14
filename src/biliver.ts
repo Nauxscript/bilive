@@ -114,7 +114,7 @@ export class Biliver {
 
     const { uname, badge } = msg.body.user
 
-    const outputStr = `${uname}${badge?.name || ''}：${msg.body.content}`
+    const outputStr = `${badge?.name || ''}${uname}：${msg.body.content}`
 
     return outputStr
   }

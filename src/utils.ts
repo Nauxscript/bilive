@@ -30,10 +30,12 @@ export const sligleLineConsole = (message: any) => {
 export const setBadgeStyle = (msg: Message<DanmuMsg | SuperChatMsg>) => {
   if (!msg.body.user.badge)
     return msg
-  const { badge, uname } = msg.body.user
+  const { badge } = msg.body.user
+
   // 名字颜色
-  badge.name = `[${chalk.hex(badge.color)(badge.name)}]`
+  badge.name = `[ ${badge.level}-${badge.name} ]`
+
   // 点亮
-  badge.active && (msg.body.user.uname = `● ${uname}`)
+  badge.active && (badge.name = chalk.bgHex(badge.color).inverse(badge.name))
   return msg
 }
