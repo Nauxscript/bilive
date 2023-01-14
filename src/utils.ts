@@ -2,6 +2,7 @@ import readline from 'readline'
 import type { DanmuMsg, Message, SuperChatMsg } from 'blive-message-listener'
 import say from 'say'
 import chalk from 'chalk'
+import { circleNumbe, circleNumber } from './dictMap'
 
 export const debouce = <T = unknown>(cb: (args: T) => void, time?: number) => {
   let timer: NodeJS.Timeout
@@ -31,9 +32,9 @@ export const setBadgeStyle = (msg: Message<DanmuMsg | SuperChatMsg>) => {
   if (!msg.body.user.badge)
     return msg
   const { badge } = msg.body.user
-
+  const lv = circleNumber[badge.level] || badge.level
   // 名字颜色
-  badge.name = `[ ${badge.level}-${badge.name} ]`
+  badge.name = `[${lv}${badge.name}]`
 
   // 点亮
   badge.active && (badge.name = chalk.bgHex(badge.color).inverse(badge.name))
