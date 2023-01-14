@@ -64,7 +64,7 @@ export class Biliver {
   }
 
   fire(msg: BasicMessage) {
-    this.view.addListItem(this.createBulletStr(msg))
+    this.view.bulletList.addListItem(this.createBulletStr(msg))
   }
 
   say(msg: BasicMessage) {

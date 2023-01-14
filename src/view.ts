@@ -1,9 +1,10 @@
-import c from 'child_process'
 import type { Widgets } from 'blessed'
-import { box, list, loading, screen, text } from 'blessed'
+import { box, loading, screen } from 'blessed'
+import { LinkText } from './components/linkText'
 import type { RoomInfo } from './fetchs'
 import type { MyElements } from './viewBasicData'
 import { heightMap, initDataBulletList, initDataHeader } from './viewBasicData'
+import { InteractiveList } from './components/interactiveList'
 
 // 直播间地址前缀
 const baseLiveUrl = 'https://live.bilibili.com/'
@@ -22,13 +23,18 @@ export class BiliverView {
 
   header = box(initDataHeader)
 
-  roomTitle = text({
-    content: '1234',
+  roomTitle = new LinkText({
+    content: ' - ',
     top: -1,
     left: 2,
   })
 
-  bulletList = list(initDataBulletList)
+  // bulletList = list(initDataBulletList)
+  bulletList = new InteractiveList(this, Object.assign(initDataBulletList, {
+    customOptions: {
+      listTitle: ' 弹幕栏 ',
+    },
+  }))
 
   loadingDialog = loading({
     top: 'center',
@@ -74,17 +80,6 @@ export class BiliverView {
 
   private bindHeaderEvent() {}
 
-  private bindBulletListEvent() {
-    this.bulletList.key(['up', 'down'], (ch, key) => {
-      this.scroll(key.name === 'up' ? 0 : 1)
-    })
-
-    // scroll to bottom
-    this.bulletList.key(['S-g'], () => {
-      this.bulletList.setScrollPerc(100)
-    })
-  }
-
   private bindScreenEvent() {
     this.screen.key(['left', 'right'], (ch, key) => {
       let step = 1
@@ -123,68 +118,37 @@ export class BiliverView {
     }
   }
 
-  private scroll(index: 1 | 0) {
-    // for debugging
-    // this.header.content = `getScroll:${this.bulletList.getScroll()};childBase:${this.bulletList.childBase};length: ${this.bulletListData.length};height:${this.bulletList.height}`
-    let to = 0
-    if (index)
-      to = this.bulletList.childBase + Number(this.bulletList.height) - 2
-    else
-      to = this.bulletList.childBase - 1
-
-    if (index >= 0 && index <= this.bulletListData.length - 1) {
-      this.bulletList.scrollTo(to)
-      this.screen.render()
-    }
-  }
-
-  private getLastVisualElementIndex() {
-    this.header.content = `${this.bulletList.childBase + Number(this.bulletList.height) + 1}`
-    return this.bulletList.childBase + Number(this.bulletList.height)
-  }
+  // private getLastVisualElementIndex() {
+  //   this.header.content = `${this.bulletList.childBase + Number(this.bulletList.height) + 1}`
+  //   return this.bulletList.childBase + Number(this.bulletList.height)
+  // }
 
   private initHeader() {
     // this.roomTitle.content = `房间号：${this.roomInfo.room_id}`
     // this.roomTitle.content = this.roomInfo.title || ''
-    this.header.append(this.roomTitle)
-    this.roomTitle.on('click', () => {
-      c.exec(`open ${this.roomInfo.room_url}`, (error) => {
-        if (error)
-          c.exec(`open ${this.roomInfo.room_url}`)
-      })
-    })
+    this.roomTitle.setUrl(this.roomInfo.room_url)
+    this.header.append(this.roomTitle.ele)
     this.bindHeaderEvent()
   }
 
   private refreshHeader() {
     const { title, description, room_id } = this.roomInfo
-    this.roomTitle.content = ` ${title} | ${room_id} ` || ''
+    this.roomTitle.ele.content = ` ${title} | ${room_id} ` || ''
     this.header.content = description || ''
 
     this.screen.render()
   }
 
-  private initBulletList() {
-    this.bulletList.append(text({
-      content: ' 弹幕栏 ',
-      top: -1,
-      left: 2,
-    }))
-
-    this.bindBulletListEvent()
-  }
-
   init() {
     this.initHeader()
-    this.initBulletList()
 
     this.appendView(this.header)
-    this.appendView(this.bulletList)
+    this.appendView(this.bulletList.ele)
     this.appendView(this.loadingDialog, true)
 
     // focus bulletList first
     this.currViewIndex = 1
-    this.bulletList.focus()
+    this.viewSequence[this.currViewIndex].focus()
 
     this.bindFocusAndBlurEvent()
     this.bindScreenEvent()
@@ -202,13 +166,6 @@ export class BiliverView {
       return
     }
     this.loadingDialog.stop()
-  }
-
-  addListItem(item: string) {
-    this.bulletListData.push(item)
-    this.bulletList.add(item)
-    this.bulletList.scroll(1)
-    this.screen.render()
   }
 
   updateRoomInfo(info: Partial<RoomInfo>) {
