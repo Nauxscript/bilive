@@ -11,6 +11,7 @@ export class InteractiveList {
   parent: BiliverView
   listData: string[] = []
   customOption: CustomOptions | undefined
+  debugMode = false
 
   constructor(parent: BiliverView, opt?: Widgets.ListOptions<any> & { customOptions?: CustomOptions }) {
     this.ele = list(opt)
@@ -52,13 +53,22 @@ export class InteractiveList {
 
     if (to >= 0 && to <= this.listData.length - 1) {
       this.ele.scrollTo(to)
-      this.parent.render()
+      this.ele.render()
     }
   }
 
   addListItem(item: string) {
+    if (this.debugMode)
+      return
     this.listData.push(item)
     this.ele.add(item)
+    this.ele.scroll(1)
+    this.parent.render()
+  }
+
+  log(str: any) {
+    this.debugMode = true
+    this.ele.add(JSON.stringify(str))
     this.ele.scroll(1)
     this.parent.render()
   }
