@@ -43,8 +43,6 @@ export class InteractiveList {
   }
 
   private scroll(index: 1 | 0) {
-    // for debugging
-    // this.header.content = `getScroll:${this.ele.getScroll()};childBase:${this.ele.childBase};length: ${this.eleData.length};height:${this.ele.height}`
     let to = 0
     if (index)
       to = this.ele.childBase + Number(this.ele.height) - 2
@@ -53,7 +51,7 @@ export class InteractiveList {
 
     if (to >= 0 && to <= this.listData.length - 1) {
       this.ele.scrollTo(to)
-      this.ele.render()
+      this.parent.render()
     }
   }
 
