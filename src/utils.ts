@@ -89,3 +89,15 @@ export const refreshViewElementsSize = (currName: MyElements, currIndex: number,
 
   return res
 }
+
+export const throttle = (fn: Function, time = 300) => {
+  let timer: NodeJS.Timeout | undefined
+
+  return (...args: unknown[]) => {
+    if (timer)
+      clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, time)
+  }
+}

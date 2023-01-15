@@ -5,7 +5,7 @@ import type { RoomInfo } from './fetchs'
 import type { MyElements } from './viewBasicData'
 import { initDataBulletList, initDataHeader, initHeightMap, initRoomMsgList } from './viewBasicData'
 import { InteractiveList } from './components/interactiveList'
-import { refreshViewElementsSize } from './utils'
+import { refreshViewElementsSize, throttle } from './utils'
 import type { MapProps } from './types'
 
 // 直播间地址前缀
@@ -142,7 +142,7 @@ export class BiliverView {
     this.roomTitle.ele.content = ` ${title} | ${room_id} ` || ''
     this.header.content = description || ''
 
-    this.screen.render()
+    this.render()
   }
 
   init() {
@@ -161,9 +161,9 @@ export class BiliverView {
     this.bindScreenEvent()
   }
 
-  render() {
+  render = throttle(() => {
     this.screen.render()
-  }
+  })
 
   loading(isLoading: boolean, msg?: string) {
     if (isLoading) {
