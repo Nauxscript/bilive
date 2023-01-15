@@ -40,6 +40,17 @@ export class InteractiveList {
     this.ele.key(['S-g'], () => {
       this.ele.setScrollPerc(100)
     })
+
+    // reset scroll height
+    this.ele.on('blur', () => {
+      this.ele.setScrollPerc(100)
+      this.parent.render()
+    })
+
+    this.ele.on('focus', () => {
+      this.ele.setScrollPerc(100)
+      this.parent.render()
+    })
   }
 
   private scroll(index: 1 | 0) {
