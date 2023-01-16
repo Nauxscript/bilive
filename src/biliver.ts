@@ -1,10 +1,7 @@
-/* eslint-disable no-console */
-// import fs from 'fs'
 import say from 'say'
 import type { GiftMsg, Message, MessageListener } from 'blive-message-listener'
 import { type MsgHandler, startListen } from 'blive-message-listener'
 import type { BasicMessage } from './types'
-// import chalk from 'chalk'
 import { BiliverView } from './view'
 import { debouceSpeak, generateBullet, generateGift } from './utils'
 import type { RoomInfo } from './fetchs'
@@ -117,6 +114,7 @@ export class Biliver {
         }, 6000)
       },
       onError: (err) => {
+        // eslint-disable-next-line no-console
         console.log(err)
         this.view.loading(false, 'connect error')
         setTimeout(() => {

@@ -25,9 +25,6 @@ export const initDataHeader: Widgets.BoxOptions = {
         fg: 'white',
       },
     },
-    hover: {
-      bg: 'green',
-    },
   },
 }
 

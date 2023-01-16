@@ -14,11 +14,7 @@ cli.command('start <roomId>', 'start to get the bullets from specific room').opt
     roomId,
     isCanSay: options.say,
   })
-
   biliver.start()
-
-  // console.log(chalk.yellow(roomid, options.say))
-  // console.log(chalk.blue.bold('this is bule line'))
 })
 
 cli.help()

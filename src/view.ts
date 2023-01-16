@@ -11,8 +11,6 @@ import type { MapProps } from './types'
 // 直播间地址前缀
 const baseLiveUrl = 'https://live.bilibili.com/'
 
-// for debugging
-// const testData = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 export class BiliverView {
   private viewSequence: Widgets.BoxElement [] = []
   private currViewIndex = 0
@@ -34,7 +32,6 @@ export class BiliverView {
     bold: 'bolder',
   })
 
-  // bulletList = list(initDataBulletList)
   bulletList = new InteractiveList(this, Object.assign(initDataBulletList, {
     customOptions: {
       listTitle: ' 弹幕栏 ',
@@ -71,24 +68,6 @@ export class BiliverView {
     this.render()
   }
 
-  private bindFocusAndBlurEvent() {
-    // this.viewSequence.forEach((ele) => {
-    //   ele.on('focus', () => {
-    //     const { top } = this.calculateHeightMap[ele.name as MyElements]
-    //     top && (ele.top = top)
-    //     this.screen.render()
-    //   })
-
-    //   ele.on('blur', () => {
-    //     const { top } = this.calculateHeightMap[ele.name as MyElements]
-    //     ele.top = top
-    //     this.screen.render()
-    //   })
-    // })
-  }
-
-  private bindHeaderEvent() {}
-
   private bindScreenEvent() {
     this.screen.key(['left', 'right'], (ch, key) => {
       let step = 1
@@ -104,6 +83,7 @@ export class BiliverView {
 
     // helper dialog
     this.screen.key(['?'], () => {
+      // todo: add helper modal
       this.header.content = '?'
     })
 
@@ -130,11 +110,8 @@ export class BiliverView {
   }
 
   private initHeader() {
-    // this.roomTitle.content = `房间号：${this.roomInfo.room_id}`
-    // this.roomTitle.content = this.roomInfo.title || ''
     this.roomTitle.setUrl(this.roomInfo.room_url)
     this.header.append(this.roomTitle.ele)
-    this.bindHeaderEvent()
   }
 
   private refreshHeader() {
@@ -157,7 +134,6 @@ export class BiliverView {
     this.currViewIndex = 2
     this.focusElementByIndex(this.currViewIndex)
 
-    this.bindFocusAndBlurEvent()
     this.bindScreenEvent()
   }
 
