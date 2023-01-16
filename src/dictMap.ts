@@ -2,7 +2,7 @@ export const circleNumber = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '�
 
 export const guardLevelMap = ['', '总督', '提督', '舰长']
 
-// Ψ: 舰长, etc.
+// υ: 舰长, ш: 提督, Ш: 总督 etc.
 export const guardLevelSignMap = ['', ' υ ', ' ш ', ' Ш ']
 
 export const actionMap = {
