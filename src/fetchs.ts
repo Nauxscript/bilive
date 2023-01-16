@@ -10,11 +10,11 @@ export interface RoomInfo {
   description: string // 房间描述
   live_status: number // 直播状态 0 未开播 / 1 已开播
   area_id: number // 二级分区id
-  area_name: string // 二级分区名
+  area_name: string | number // 二级分区名
   parent_area_id: number // 一级分区id
-  parent_area_name: string // 一级分区名
+  parent_area_name: string | number // 一级分区名
   background: string
-  title: string
+  title: string | number
   user_cover: string
   keyframe: string
   live_time: string

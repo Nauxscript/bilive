@@ -94,9 +94,9 @@ export class Biliver {
         if (action !== 'unknown')
           this.notice(user.uname + actionMap[action])
       },
-      // onRoomInfoChange: (msg) => {
-      //   this.view.updateRoomInfo(msg.body)
-      // },
+      onRoomInfoChange: (msg) => {
+        this.view.updateRoomInfo(msg.body)
+      },
       onOpen: () => {
         this.view.loading(true)
       },
