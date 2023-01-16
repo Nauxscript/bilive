@@ -66,7 +66,9 @@ export const generateBulletName = (msg: BasicMessage) => {
 export const generateBullet = (msg: BasicMessage) => {
   const headStr = generateBulletName(msg)
   const tailStr = `：${msg.body.content}`
-  return `${headStr}${tailStr}`
+  let bulletStr = `${headStr}${tailStr}`
+  msg.isSuper && (bulletStr = chalk.underline(bulletStr))
+  return bulletStr
 }
 
 export const refreshViewElementsSize = (currName: MyElements, currIndex: number, viewSequence: Widgets.BoxElement[]) => {
