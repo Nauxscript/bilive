@@ -1,5 +1,5 @@
 import readline from 'readline'
-import type { SuperChatMsg } from 'blive-message-listener'
+import type { GiftMsg, Message, SuperChatMsg } from 'blive-message-listener'
 import say from 'say'
 import chalk from 'chalk'
 import type { Widgets } from 'blessed'
@@ -77,6 +77,19 @@ export const generateBullet = (msg: BasicMessage) => {
   let bulletStr = `${headStr}${tailStr}`
   msg.isSuper && (bulletStr = generateSuperBullet(msg, bulletStr))
   return bulletStr
+}
+
+export const generateGift = (msg: Message<GiftMsg>) => {
+  const { user, gift_name, coin_type, amount, send_master, combo } = msg.body
+  let res = ''
+  let conjunction = '投喂了'
+  send_master && (conjunction = `向${send_master.uname}${conjunction}`)
+  res = `【${user.uname}】${conjunction}【${gift_name}】`
+  amount > 1 && (res += ` ×${amount}`)
+  // todo
+  combo && (res += '[combo]')
+  coin_type === 'gold' && (chalk.bgHex('#FFD700')(res))
+  return res
 }
 
 export const refreshViewElementsSize = (currName: MyElements, currIndex: number, viewSequence: Widgets.BoxElement[]) => {

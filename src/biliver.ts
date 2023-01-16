@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 // import fs from 'fs'
 import say from 'say'
-import type { MessageListener } from 'blive-message-listener'
+import type { GiftMsg, Message, MessageListener } from 'blive-message-listener'
 import { type MsgHandler, startListen } from 'blive-message-listener'
 import type { BasicMessage } from './types'
 // import chalk from 'chalk'
 import { BiliverView } from './view'
-import { debouceSpeak, generateBullet } from './utils'
+import { debouceSpeak, generateBullet, generateGift } from './utils'
 import type { RoomInfo } from './fetchs'
 import { getRoomInfo } from './fetchs'
 import { actionMap } from './dictMap'
@@ -81,6 +81,10 @@ export class Biliver {
       say.speak(msg.body.content)
   }
 
+  noticeGift(msg: Message<GiftMsg>) {
+    this.notice(this.createGiftStr(msg))
+  }
+
   initHandler(handler?: MsgHandler) {
     const defaultHandler: MsgHandler = {
       onIncomeDanmu: (msg) => {
@@ -93,6 +97,9 @@ export class Biliver {
         const { action, user } = msg.body
         if (action !== 'unknown')
           this.notice(user.uname + actionMap[action])
+      },
+      onGift: (msg) => {
+        this.noticeGift(msg)
       },
       onRoomInfoChange: (msg) => {
         this.view.updateRoomInfo(msg.body)
@@ -122,5 +129,9 @@ export class Biliver {
 
   public createBulletStr(msg: BasicMessage): string {
     return generateBullet(msg)
+  }
+
+  public createGiftStr(msg: Message<GiftMsg>): string {
+    return generateGift(msg)
   }
 }
