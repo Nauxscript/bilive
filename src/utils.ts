@@ -1,4 +1,5 @@
 import readline from 'readline'
+import type { SuperChatMsg } from 'blive-message-listener'
 import say from 'say'
 import chalk from 'chalk'
 import type { Widgets } from 'blessed'
@@ -42,6 +43,13 @@ export const generateIdentity = (msg: BasicMessage) => {
   return idStr ? `(${idStr})` : ''
 }
 
+export const generateSuperBullet = (msg: BasicMessage, rawContent: string) => {
+  if (!msg.isSuper)
+    return rawContent
+  const { content_color, price } = msg.body as SuperChatMsg
+  return chalk.underline.hex(content_color)(`<￥${price}>${rawContent}`)
+}
+
 export const generateBadge = (msg: BasicMessage) => {
   if (!msg.body.user.badge)
     return ''
@@ -67,7 +75,7 @@ export const generateBullet = (msg: BasicMessage) => {
   const headStr = generateBulletName(msg)
   const tailStr = `：${msg.body.content}`
   let bulletStr = `${headStr}${tailStr}`
-  msg.isSuper && (bulletStr = chalk.underline(bulletStr))
+  msg.isSuper && (bulletStr = generateSuperBullet(msg, bulletStr))
   return bulletStr
 }
 
