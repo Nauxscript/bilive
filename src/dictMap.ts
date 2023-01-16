@@ -2,6 +2,9 @@ export const circleNumber = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '�
 
 export const guardLevelMap = ['', '总督', '提督', '舰长']
 
+// Ψ: 舰长, etc.
+export const guardLevelSignMap = ['', ' υ ', ' ш ', ' Ш ']
+
 export const actionMap = {
   enter: '进入直播间',
   follow: '关注了直播间',

@@ -3,7 +3,7 @@ import type { GiftMsg, Message, SuperChatMsg } from 'blive-message-listener'
 import say from 'say'
 import chalk from 'chalk'
 import type { Widgets } from 'blessed'
-import { circleNumber, guardLevelMap } from './dictMap'
+import { circleNumber, guardLevelSignMap } from './dictMap'
 import type { BasicMessage, MapProps } from './types'
 import type { MyElements } from './viewBasicData'
 import { heightMap, initHeightMap } from './viewBasicData'
@@ -32,15 +32,28 @@ export const sligleLineConsole = (message: any) => {
   process.stdout.write(message, 'utf-8')
 }
 
-export const generateIdentity = (msg: BasicMessage) => {
+export const generateUserName = (msg: BasicMessage | Message<GiftMsg>) => {
+  const { uname, badge } = msg.body.user
+  const unameStr = `@${uname}`
+  return badge ? chalk.bgHex(badge.color).inverse(unameStr) : unameStr
+}
+
+export const generateIdentity = (msg: BasicMessage | Message<GiftMsg>) => {
   if (!msg.body.user.identity)
     return ''
   let idStr = ''
+  let guardLevelStr = ''
   const { rank, guard_level, room_admin } = msg.body.user.identity
   rank && (idStr += `${circleNumber[rank - 1]} `)
-  guard_level && (idStr += guardLevelMap[guard_level])
-  room_admin && (idStr += (idStr && '|' + '房管'))
-  return idStr ? `(${idStr})` : ''
+  guard_level && (guardLevelStr = chalk.bgHex(msg.body.user.badge?.color || '')(guardLevelSignMap[guard_level]))
+  room_admin && (idStr = `${idStr}${chalk.bgHex('#FFD700')('房')}${guardLevelStr}`)
+  return idStr ? `${idStr}·` : ''
+}
+
+export const generateGiftUserName = (msg: Message<GiftMsg>) => {
+  const nameStr = generateUserName(msg)
+  const identityStr = generateIdentity(msg)
+  return identityStr + nameStr
 }
 
 export const generateSuperBullet = (msg: BasicMessage, rawContent: string) => {
@@ -55,17 +68,16 @@ export const generateBadge = (msg: BasicMessage) => {
     return ''
   let badgeStr = ''
   const { badge } = msg.body.user
-  const lv = `lv.${badge.level} · `
   // 名字颜色
-  badgeStr = `[${lv}${badge.name}]`
+  badgeStr = `${badge.name}[${badge.level}]`
 
   // 点亮
-  badge.active && (badgeStr = chalk.bgHex(badge.color).inverse(badgeStr))
+  badge.active && (badgeStr = `${chalk.bgHex(badge.color)(badgeStr)}`)
   return badgeStr
 }
 
 export const generateBulletName = (msg: BasicMessage) => {
-  const nameStr = msg.body.user.uname
+  const nameStr = generateUserName(msg)
   const idStr = generateIdentity(msg)
   const badgeStr = generateBadge(msg)
   return idStr + badgeStr + nameStr
@@ -80,11 +92,11 @@ export const generateBullet = (msg: BasicMessage) => {
 }
 
 export const generateGift = (msg: Message<GiftMsg>) => {
-  const { user, gift_name, coin_type, amount, send_master, combo } = msg.body
+  const { gift_name, coin_type, amount, send_master, combo } = msg.body
   let res = ''
   let conjunction = '投喂了'
   send_master && (conjunction = `向${send_master.uname}${conjunction}`)
-  res = `【${user.uname}】${conjunction}【${gift_name}】`
+  res = `${generateGiftUserName(msg)}${conjunction}[${gift_name}]`
   amount > 1 && (res += ` ×${amount}`)
   // todo
   combo && (res += '[combo]')
