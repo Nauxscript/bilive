@@ -1,17 +1,31 @@
 {
-  "name": "bilive",
-  "version": "0.0.1",
+  "name": "bilive-test",
+  "version": "0.0.8",
   "description": "",
-  "main": "./dist/index.mjs",
+  "main": "dist/index.cjs",
+  "type": "module",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "esno src/index.ts",
     "build": "unbuild",
-    "publish": "pnpm publish",
+    "release": "bumpp package.json --commit -- push --tag",
+    "pub": "pnpm publish",
     "test": "vitest"
   },
-  "bin": {
-    "bilive": "src/index.ts"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
   },
+  "bin": {
+    "bilive": "./cli.mjs"
+  },
+  "files": [
+    "dist"
+  ],
   "keywords": ["bilibili"],
   "author": "",
   "license": "ISC",
