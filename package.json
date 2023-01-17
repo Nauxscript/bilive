@@ -1,6 +1,6 @@
 {
-  "name": "bilive-test",
-  "version": "0.0.9",
+  "name": "@nauxscript/bilive",
+  "version": "0.0.0",
   "description": "",
   "main": "dist/index.cjs",
   "type": "module",
@@ -9,9 +9,9 @@
   "scripts": {
     "dev": "esno src/index.ts",
     "build": "unbuild",
-    "release": "bumpp package.json --commit -- push --tag",
-    "pub": "pnpm publish",
-    "test": "vitest"
+    "release": "bumpp & pnpm publish",
+    "test": "vitest",
+    "lint": "eslint ."
   },
   "exports": {
     ".": {
@@ -21,7 +21,8 @@
     }
   },
   "bin": {
-    "bilive": "./cli.mjs"
+    "bilive": "./cli.mjs",
+    "bi": "./cli.mjs"
   },
   "files": [
     "dist"
