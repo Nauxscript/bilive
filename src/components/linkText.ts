@@ -1,12 +1,12 @@
 import c from 'child_process'
 import type { Widgets } from 'blessed'
-import { text } from 'blessed'
+import blessed from 'blessed'
 
 export class LinkText {
   ele: Widgets.TextElement
   url = ''
   constructor(opt?: Widgets.TextOptions) {
-    this.ele = text(opt)
+    this.ele = blessed.text(opt)
   }
 
   bindEvent() {

@@ -1,4 +1,4 @@
-import { list, text } from 'blessed'
+import blessed from 'blessed'
 import type { Widgets } from 'blessed'
 import type { BiliverView } from './../view'
 
@@ -14,7 +14,7 @@ export class InteractiveList {
   debugMode = false
 
   constructor(parent: BiliverView, opt?: Widgets.ListOptions<any> & { customOptions?: CustomOptions }) {
-    this.ele = list(opt)
+    this.ele = blessed.list(opt)
     this.parent = parent
     this.customOption = opt?.customOptions
     this.initTitle()
@@ -22,7 +22,7 @@ export class InteractiveList {
   }
 
   private initTitle() {
-    this.customOption?.listTitle && this.ele.append(text({
+    this.customOption?.listTitle && this.ele.append(blessed.text({
       content: ` ${this.customOption.listTitle} `,
       top: -1,
       left: 2,

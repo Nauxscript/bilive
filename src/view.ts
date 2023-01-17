@@ -1,5 +1,5 @@
 import type { Widgets } from 'blessed'
-import { box, loading, screen } from 'blessed'
+import blessed from 'blessed'
 import { LinkText } from './components/linkText'
 import type { RoomInfo } from './fetchs'
 import type { MyElements } from './viewBasicData'
@@ -17,13 +17,13 @@ export class BiliverView {
 
   calculateHeightMap: Record<MyElements, MapProps> = initHeightMap
 
-  screen = screen({
+  screen = blessed.screen({
     smartCSR: true,
     fullUnicode: true,
     title: 'BiLive',
   })
 
-  header = box(initDataHeader)
+  header = blessed.box(initDataHeader)
 
   roomTitle = new LinkText({
     content: ' - ',
@@ -44,7 +44,7 @@ export class BiliverView {
     },
   }))
 
-  loadingDialog = loading({
+  loadingDialog = blessed.loading({
     top: 'center',
     left: 'center',
     width: 10,
