@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "esno src/index.ts",
     "build": "unbuild",
-    "release": "bumpp & pnpm publish",
+    "release": "bumpp && pnpm publish",
     "test": "vitest",
     "lint": "eslint ."
   },
