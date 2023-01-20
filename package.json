@@ -21,8 +21,7 @@
     }
   },
   "bin": {
-    "bilive": "./cli.mjs",
-    "bi": "./cli.mjs"
+    "bilive": "./cli.mjs"
   },
   "files": [
     "dist"
