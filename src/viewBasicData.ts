@@ -28,7 +28,7 @@ export const initDataHeader: Widgets.BoxOptions = {
   },
 }
 
-export const initRoomMsgList: Widgets.ListOptions = {
+export const initRoomMsgList: Widgets.ListOptions<Widgets.ListElementStyle> = {
   name: MyElements.ROOM_MSG_LIST,
   top: 4,
   left: 'center',
@@ -47,9 +47,6 @@ export const initRoomMsgList: Widgets.ListOptions = {
       border: {
         fg: 'white',
       },
-      scrollbar: {
-        bg: 'white',
-      },
     },
   },
   mouse: true,
@@ -62,7 +59,7 @@ export const initRoomMsgList: Widgets.ListOptions = {
   // items: testData, // for testing
 }
 
-export const initDataBulletList: Widgets.ListOptions = {
+export const initDataBulletList: Widgets.ListOptions<Widgets.ListElementStyle> = {
   name: MyElements.BULLET_LIST,
   top: 14,
   left: 'center',
@@ -80,9 +77,6 @@ export const initDataBulletList: Widgets.ListOptions = {
     focus: {
       border: {
         fg: 'white',
-      },
-      scrollbar: {
-        bg: 'white',
       },
     },
   },
