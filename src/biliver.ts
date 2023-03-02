@@ -1,12 +1,13 @@
 import say from 'say'
-import type { GiftMsg, Message, MessageListener } from 'blive-message-listener'
-import { type MsgHandler, startListen } from 'blive-message-listener'
+import type { GiftMsg, Message } from 'blive-message-listener'
+import { type MsgHandler } from 'blive-message-listener'
 import type { BasicMessage } from './types'
 import { BiliverView } from './view'
 import { debouceSpeak, generateBullet, generateGift } from './utils'
 import type { RoomInfo } from './fetchs'
 import { getRoomInfo } from './fetchs'
 import { actionMap } from './dictMap'
+import type Listener from './listener'
 
 export interface Options {
   roomId: string
@@ -25,18 +26,17 @@ export class Biliver {
 
   bullets: Map<string, BasicMessage> = new Map()
 
-  listener: MessageListener | undefined
-
   handler: MsgHandler = {}
 
   view: BiliverView
 
   roomInfo: RoomInfo | undefined
 
-  constructor(options: Options) {
+  constructor(options: Options, private listener: Listener) {
     this.roomId = Number(options.roomId)
     this.isCanSay = options.isCanSay || false
     this.speakAtSameTime = options.speakAtSameTime || false
+    this.listener = listener
     this.view = new BiliverView(this.roomId)
     this.initHandler()
     this.getRoomInfo()
@@ -53,7 +53,7 @@ export class Biliver {
   }
 
   start() {
-    this.listener = startListen(+this.roomId, this.handler)
+    this.listener.startListen(+this.roomId, this.handler)
   }
 
   add(msg: BasicMessage) {
