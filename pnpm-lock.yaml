@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@antfu/eslint-config': ^0.34.0
-  '@types/blessed': ^0.1.19
+  '@types/blessed': ^0.1.21
   '@types/node': ^18.11.18
   blessed: ^0.1.81
   blive-message-listener: ^0.4.1
@@ -19,7 +19,7 @@ specifiers:
   vitest: ^0.26.3
 
 dependencies:
-  '@types/blessed': 0.1.19
+  '@types/blessed': 0.1.21
   blessed: 0.1.81
   blive-message-listener: 0.4.1
   cac: 6.7.14
@@ -780,8 +780,8 @@ packages:
       rollup: 3.9.1
     dev: true
 
-  /@types/blessed/0.1.19:
-    resolution: {integrity: sha512-r4qnseYWBsi/kxo5AAlCS22EnTXFbGpnvuXUubJikVeRnYB3e5HwV3NtcwJ0Sk5KOGaLvo9Rtwb8hzxfbqbQPg==}
+  /@types/blessed/0.1.21:
+    resolution: {integrity: sha512-nlJHCM/wDUtvhDF7FBW2fWTP1JIPMm16xKXTdaAgOaqXiT4VkB/GIc7LAX5BxhTR09BVeNF2JzxszHC9Tres2w==}
     dependencies:
       '@types/node': 18.11.18
     dev: false
