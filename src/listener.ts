@@ -1,11 +1,15 @@
 import type { MsgHandler, startListen } from 'blive-message-listener'
 
 class Listener {
-  constructor(private messageListener: typeof startListen) {
+  constructor(private roomId: number, private messageListener: typeof startListen) {
   }
 
-  startListen(roomId: number, handler: MsgHandler) {
-    this.messageListener(roomId, handler)
+  get getRoomId() {
+    return this.roomId
+  }
+
+  startListen(handler: MsgHandler) {
+    this.messageListener(this.roomId, handler)
   }
 }
 

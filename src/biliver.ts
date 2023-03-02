@@ -53,7 +53,7 @@ export class Biliver {
   }
 
   start() {
-    this.listener.startListen(+this.roomId, this.handler)
+    this.listener.startListen(this.handler)
   }
 
   add(msg: BasicMessage) {

@@ -11,7 +11,7 @@ const cli = Cac(name)
 let biliver: Biliver
 
 cli.command('start <roomId>', 'start to get the bullets from specific room').option('-s, --say', 'say every bullet').action((roomId: string, options) => {
-  const listener = new Listener(startListen)
+  const listener = new Listener(+roomId, startListen)
   biliver = new Biliver({
     roomId,
     isCanSay: options.say,
