@@ -6,8 +6,8 @@ import { BiliverView } from './view'
 import { debouceSpeak, generateBullet, generateGift } from './utils'
 import type { RoomInfo } from './fetchs'
 import { getRoomInfo } from './fetchs'
-import { actionMap } from './dictMap'
 import type Listener from './listener'
+import { basicListenerHandler } from './listener'
 
 export interface Options {
   roomId: string
@@ -83,46 +83,8 @@ export class Biliver {
   }
 
   initHandler(handler?: MsgHandler) {
-    const defaultHandler: MsgHandler = {
-      onIncomeDanmu: (msg) => {
-        this.add(msg)
-      },
-      onIncomeSuperChat: (msg) => {
-        this.add(msg)
-      },
-      onUserAction: (msg) => {
-        const { action, user } = msg.body
-        if (action !== 'unknown')
-          this.notice(user.uname + actionMap[action])
-      },
-      onGift: (msg) => {
-        this.noticeGift(msg)
-      },
-      onRoomInfoChange: (msg) => {
-        this.view.updateRoomInfo(msg.body)
-      },
-      onOpen: () => {
-        this.view.loading(true)
-      },
-      onStartListen: () => {
-        this.view.loading(false)
-      },
-      onClose: () => {
-        this.view.loading(true, 'up 下播了')
-        setTimeout(() => {
-          process.exit()
-        }, 6000)
-      },
-      onError: (err) => {
-        // eslint-disable-next-line no-console
-        console.log(err)
-        this.view.loading(false, 'connect error')
-        setTimeout(() => {
-          process.exit()
-        }, 6000)
-      },
-    }
-    this.handler = Object.assign(defaultHandler, handler || {})
+    const basicHandler = basicListenerHandler(this)
+    this.handler = Object.assign(basicHandler, handler || {})
   }
 
   public createBulletStr(msg: BasicMessage): string {
