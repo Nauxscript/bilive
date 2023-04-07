@@ -8,12 +8,12 @@ interface CustomOptions {
 
 export class InteractiveList {
   ele: Widgets.ListElement
-  parent: BiliverView
+  parent: BiliverView | Widgets.Screen
   listData: string[] = []
   customOption: CustomOptions | undefined
   debugMode = false
 
-  constructor(parent: BiliverView, opt?: Widgets.ListOptions<any> & { customOptions?: CustomOptions }) {
+  constructor(parent: BiliverView | Widgets.Screen, opt?: Widgets.ListOptions<any> & { customOptions?: CustomOptions }) {
     this.ele = blessed.list(opt)
     this.parent = parent
     this.customOption = opt?.customOptions
