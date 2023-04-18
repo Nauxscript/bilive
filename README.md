@@ -43,3 +43,13 @@ bilive -v
 ```
 bilive -help
 ```
+
+## Development
+
+本地开发运行，在项目目录下：
+
+```
+pnpm link --global
+```
+
+再运行
