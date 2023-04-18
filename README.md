@@ -53,3 +53,9 @@ pnpm link --global
 ```
 
 再运行
+
+```
+bilive -v
+```
+
+若输出的版本带有 `[Testing Version]` 字样，则本地运行成功。
