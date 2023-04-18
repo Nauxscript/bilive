@@ -26,7 +26,7 @@ export const basicListenerHandler = (biliver: Biliver) => {
     onUserAction: (msg) => {
       const { action, user } = msg.body
       if (action !== 'unknown')
-        biliver.notice(user.uname + actionMap[action])
+        biliver.notice(user.uname + actionMap[action as keyof typeof actionMap])
     },
     onGift: (msg) => {
       biliver.noticeGift(msg)
