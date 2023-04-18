@@ -7,7 +7,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "esno src/index.ts",
+    "dev": "unbuild --stub --environment ENVIRONMENT:development",
     "build": "unbuild",
     "release": "bumpp && pnpm publish",
     "test": "vitest",
