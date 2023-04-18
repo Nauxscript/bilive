@@ -8,11 +8,9 @@ const container = blessed.screen({
   warnings: true,
 })
 
-const interactiveList = new InteractiveList(container, {
-  customOptions: {
-    listTitle: 'testing title',
-  },
-})
+const interactiveList = new InteractiveList(blessed.list(), container,
+  'testing title',
+)
 
 container.append(interactiveList.ele)
 

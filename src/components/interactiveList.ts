@@ -7,23 +7,18 @@ interface CustomOptions {
 }
 
 export class InteractiveList {
-  ele: Widgets.ListElement
-  parent: BiliverView | Widgets.Screen
   listData: string[] = []
   customOption: CustomOptions | undefined
   debugMode = false
 
-  constructor(parent: BiliverView | Widgets.Screen, opt?: Widgets.ListOptions<any> & { customOptions?: CustomOptions }) {
-    this.ele = blessed.list(opt)
-    this.parent = parent
-    this.customOption = opt?.customOptions
+  constructor(public ele: Widgets.ListElement, public parent: BiliverView | Widgets.Screen, public listTitle?: string) {
     this.initTitle()
     this.bindBulletListEvent()
   }
 
   private initTitle() {
     this.customOption?.listTitle && this.ele.append(blessed.text({
-      content: ` ${this.customOption.listTitle} `,
+      content: ` ${this.listTitle} `,
       top: -1,
       left: 2,
     }))

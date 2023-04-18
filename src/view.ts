@@ -32,17 +32,9 @@ export class BiliverView {
     bold: 'bolder',
   })
 
-  bulletList = new InteractiveList(this, Object.assign(initDataBulletList, {
-    customOptions: {
-      listTitle: ' 弹幕栏 ',
-    },
-  }))
+  bulletList = new InteractiveList(blessed.list(initDataBulletList), this, ' 弹幕栏 ')
 
-  roomMsgList = new InteractiveList(this, Object.assign(initRoomMsgList, {
-    customOptions: {
-      listTitle: ' 直播间消息 ',
-    },
-  }))
+  roomMsgList = new InteractiveList(blessed.list(initRoomMsgList), this, ' 直播间消息 ')
 
   loadingDialog = blessed.loading({
     top: 'center',
