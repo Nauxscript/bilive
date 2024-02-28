@@ -33,7 +33,10 @@
   "keywords": [
     "bilibili"
   ],
-  "author": "",
+  "author": {
+    "name": "nauxscript",
+    "url": "https://github.com/Nauxscript"
+  },
   "license": "ISC",
   "dependencies": {
     "@types/blessed": "^0.1.21",
