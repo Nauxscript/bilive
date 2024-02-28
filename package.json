@@ -1,7 +1,7 @@
 {
   "name": "@nauxscript/bilive",
   "version": "0.0.4",
-  "description": "",
+  "description": "一个命令行弹幕姬 / display bullet from bilibili live stream comments in command line.",
   "main": "dist/index.cjs",
   "type": "module",
   "module": "dist/index.mjs",
@@ -20,10 +20,6 @@
       "import": "./dist/index.mjs"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Nauxscript/bilive.git"
-  },
   "bin": {
     "bilive": "./cli.mjs"
   },
@@ -36,6 +32,11 @@
   "author": {
     "name": "nauxscript",
     "url": "https://github.com/Nauxscript"
+  },
+  "repository": "https://github.com/Nauxscript/bilive",
+  "homepage": "https://github.com/Nauxscript/bilive",
+  "bugs": {
+    "url": "https://github.com/Nauxscript/bilive/issues"
   },
   "license": "ISC",
   "dependencies": {
