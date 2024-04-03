@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "unbuild --stub",
     "build": "unbuild",
-    "release": "bumpp && pnpm publish",
+    "release": "pnpm build && bumpp && pnpm publish",
     "test": "vitest",
     "lint": "eslint ."
   },
