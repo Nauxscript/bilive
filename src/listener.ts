@@ -50,6 +50,7 @@ export const basicListenerHandler = (biliver: Biliver) => {
       // eslint-disable-next-line no-console
       console.log(err)
       biliver.view.loading(false, 'connect error')
+      biliver.notice('damn')
       setTimeout(() => {
         process.exit()
       }, 6000)

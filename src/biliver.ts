@@ -1,6 +1,5 @@
 import say from 'say'
-import type { GiftMsg, Message } from 'blive-message-listener'
-import { type MsgHandler } from 'blive-message-listener'
+import type { GiftMsg, Message, MsgHandler } from 'blive-message-listener'
 import type { BasicMessage } from './types'
 import { BiliverView } from './view'
 import { debouceSpeak, generateBullet, generateGift } from './utils'

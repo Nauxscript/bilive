@@ -7,7 +7,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "unbuild --stub --environment ENVIRONMENT:development",
+    "dev": "unbuild --stub",
     "build": "unbuild",
     "release": "bumpp && pnpm publish",
     "test": "vitest",
@@ -42,9 +42,10 @@
   "dependencies": {
     "@types/blessed": "^0.1.21",
     "blessed": "^0.1.81",
-    "blive-message-listener": "^0.4.1",
+    "blive-message-listener": "^0.4.4",
     "cac": "^6.7.14",
     "chalk": "^5.2.0",
+    "cross-env": "^7.0.3",
     "ohmyfetch": "^0.4.21",
     "say": "^0.16.0"
   },

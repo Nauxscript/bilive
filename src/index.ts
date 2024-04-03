@@ -6,8 +6,6 @@ import { name, version } from '../package.json'
 import { Biliver } from './biliver'
 import Listener from './listener'
 
-declare const ENVIRONMENT: string
-
 const cli = Cac(name)
 
 let biliver: Biliver
@@ -25,6 +23,6 @@ cli.command('start <roomId>', 'start to get the bullets from specific room').opt
 
 cli.help()
 
-cli.version(version + (process.env.ENVIRONMENT === 'development' ? '[Testing Version]' : '' ))
+cli.version(version + (process.env.ENVIRONMENT === 'development' ? '[Testing Version]' : '') + process.env.NODE_ENV)
 
 cli.parse()
